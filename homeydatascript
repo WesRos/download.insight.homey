@@ -1,0 +1,45 @@
+#!/bin/bash
+
+#Get Homey Insight Data
+# Parameter:
+#   Bearer:             like-->ba44b19e0e4817a438365f7a25a323cy2ci885a438610
+#   IP adrress Homey:   like-->192.168.1.1
+#   logname:            like-->Temperatuur.log
+#   uri:                like-->0f0dcd68-32cf-49bc-ae2b-2b3deb2dafaa  
+#   name:               like-->measure_temperature
+#
+# This Script create a Script: called "curl_command"
+# you cuold run this script one time the create the "curl_commands" script. Place curl_commands script in a cronjob for automaticly download.
+
+bearer=[your bearer]
+ip=[homey IP address]
+
+save_folder=logging
+# First get all Device data and save in file: data
+curl -H "Authorization: Bearer $bearer" -o data http://$ip/api/manager/insights/log/
+
+#Make the "data file" data readable and save in "json_data"
+jq '.' data > json_data
+rm data
+
+#Create directory to save the log files
+mkdir $save_folder
+
+#Count all the uri in the json message
+z=$(cat json_data | jq '[.result[] | select(.uri)] | length')
+z=$((z-1))
+
+#Create curl_commands script for the first time, 
+echo "#!/bin/bash" > curl_commands
+
+for z in `seq 1 $z`;
+do
+  uri=$(jq '.result['$z']|.uri' json_data|sed s/\"//g)
+  logname=$(jq '.result['$z']|.uriObj|.name' json_data|sed s/\"//g)
+  name=$(jq '.result['$z']|.name' json_data|sed s/\"//g)
+  link=$(echo "curl -H \"Authorization: Bearer "$bearer"\" -o \""$save_folder"/"$logname"_"$name".log\" http://"$ip"/api/manager/insights/log/"$uri"/"$name"/entry")
+  echo $link >> curl_commands
+done
+
+rm json_data
+sh curl_commands
