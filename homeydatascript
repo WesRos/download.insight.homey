@@ -39,7 +39,10 @@ do
   name=$(jq '.result['$z']|.name' json_data|sed s/\"//g)
   link=$(echo "curl -H \"Authorization: Bearer "$bearer"\" -o \""$save_folder"/"$logname"_"$name".log\" http://"$ip"/api/manager/insights/log/"$uri"/"$name"/entry")
   echo $link >> curl_commands
+  echo "cat \""$save_folder"/"$logname"_"$name".log\" \""$save_folder"/"$logname"_"$name"_new.log\" | uniq > \""$save_folder"/"$logname"_"$name".log\"" >> curl_commands
+  echo "rm \""$save_folder"/"$logname"_"$name"_new.log\"" >> curl_commands
 done
 
 rm json_data
 sh curl_commands
+
