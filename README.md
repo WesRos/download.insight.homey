@@ -1,7 +1,9 @@
 # download.insight.homey
-Script to download Insight from Homey
+Script to automaticly download Insight data from Homey.
 
-When you whats to view Homey insoght information in another software application, like: Nagios, Grafana, Domotics. Or you want to be sure you dont miss anything. You could download al the InSight information with this script.
+When you whats to view Homey insight information in another software application, like: Nagios, Grafana, Domotics. Or you want to be sure you dont miss anything. You could download all the InSight information with this script.
+
+This Script generates the "curl_commands"-Script. Add the "curl_commands"-Script in cron and this goes automaticly.
 
 Requirments:
 curl
