@@ -8,8 +8,9 @@
 #   uri:                like-->0f0dcd68-32cf-49bc-ae2b-2b3deb2dafaa  
 #   name:               like-->measure_temperature
 #
-# This Script create a Script: called "curl_command"
-# you cuold run this script one time the create the "curl_commands" script. Place curl_commands script in a cronjob for automaticly download.
+# This Script create a Script: called "curl_commands"
+# you could run this script one time the create the "curl_commands" script. Place curl_commands script in a cronjob for automaticly download.
+# NEEDS: curl AND jq
 
 bearer=[your bearer]
 ip=[homey IP address]
