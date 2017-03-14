@@ -1,21 +1,24 @@
 #!/bin/bash
 
 #Get Homey Insight Data
-# Parameter:
-#   Bearer:             like-->ba44b19e0e4817a438365f7a25a323cy2ci885a438610
-#   IP adrress Homey:   like-->192.168.1.1
-#   logname:            like-->Temperatuur.log
-#   uri:                like-->0f0dcd68-32cf-49bc-ae2b-2b3deb2dafaa  
-#   name:               like-->measure_temperature
 #
 # This Script create a Script: called "curl_commands"
-# you could run this script one time the create the "curl_commands" script. Place curl_commands script in a cronjob for automaticly download.
+# You could run this script one time the create the "curl_commands" script. Place curl_commands script in a cronjob for automaticly download.
 # NEEDS: curl AND jq
-
+#
+#
+# You need to change two paramters for use:
+#   Bearer:             like-->ba44b19e0e4817a438365f7a25a323cy2ci885a438610
+#   IP adrress Homey:   like-->192.168.1.1
+#
 bearer=[your bearer]
 ip=[homey IP address]
 
-save_folder=logging
+# You could change the folder where the logs would be saved.
+save_folder=/home/pi/logging
+
+###________________From here: do not change anything________________________________________________________###
+
 # First get all Device data and save in file: data
 curl -H "Authorization: Bearer $bearer" -o data http://$ip/api/manager/insights/log/
 
